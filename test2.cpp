@@ -1,0 +1,601 @@
+#include <iostream>
+#include <string>
+#include <chrono>
+#include <thread>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <variant>
+
+#include <conio.h>
+
+#define KEY_ENTER 13
+#define KEY_ESCAPE 27
+
+using namespace std;
+
+// Forward declaration for MainMenu to avoid scope issues
+void MainMenu();
+
+// Quiz logic
+void scoresheet();
+
+// Border sizes
+const int BORDER_WIDTH = 80;
+const int MENU_SIDE = 30;
+const int MARGIN = 20;
+const int TITLE_MARGIN = 30;
+const int NUM_SLOT = 4;
+string SLOT[NUM_SLOT];
+
+// --- Border Drawing ---
+void DrawTopBorder() {
+    cout << "+" << string(BORDER_WIDTH, '-') << "+" << endl;
+    cout << "|" << string(BORDER_WIDTH, ' ') << "|" << endl;
+}
+
+void DrawBottomBorder() {
+    cout << "|" << string(BORDER_WIDTH, ' ') << "|" << endl;
+    cout << "+" << string(BORDER_WIDTH, '-') << "+" << endl;
+}
+
+void DrawMenuTop() {
+    cout << string(MENU_SIDE, ' ') << "+" << string(MARGIN, '-') << "+" << endl;
+    cout << string(MENU_SIDE, ' ') << "|" << string(MARGIN, ' ') << "|" << endl;
+}
+
+void DrawMenuBottom() {
+    cout << string(MENU_SIDE, ' ') << "|" << string(MARGIN, ' ') << "|" << endl;
+    cout << string(MENU_SIDE, ' ') << "+" << string(MARGIN, '-') << "+" << endl;
+}
+
+
+void DrawMenu_Margin(string text, int typeSpeed) {
+    int marginSpaces = 30;
+    const int boxWidth = BORDER_WIDTH - 2 * marginSpaces;
+    cout << string(marginSpaces, ' ') << "|";
+    for (char c : text) {
+        cout << c << flush;
+        this_thread::sleep_for(chrono::milliseconds(typeSpeed));
+    }
+    int padding = boxWidth - text.length();
+    if (padding > 0) {
+        cout << string(padding, ' ');
+    }
+    cout << "|" << endl;
+}
+
+void DrawText_Margin(string text, int typeSpeed) {
+    const int marginSpaces = 10;
+    const int boxWidth = BORDER_WIDTH - 2 * marginSpaces; //60 text width
+
+    vector<string> lines; //store
+    string currentLine; //currentoutput
+    string word; //read
+
+    DrawTopBorder();
+
+    for (size_t i = 0; i <= text.length(); ++i) {
+        char c = text[i];
+
+        if (c == '\n' || c == '\0' || c == '\N') //handle newline and end of line
+        {
+            // Add word to current line or push to newline
+            if (!word.empty()) {
+                if (currentLine.length() + word.length() + (currentLine.empty() ? 0 : 1) <= boxWidth) {
+                    if (!currentLine.empty())
+                    {
+                        currentLine += " ";
+                    }
+                    currentLine += word;
+                }
+                else
+                {
+                    if (!currentLine.empty())
+                    {
+                        lines.push_back(currentLine);
+                    }
+
+                    currentLine = word;
+                }
+                word.clear();
+            }
+            if (!currentLine.empty()) // if there's text in line, push to current
+                {
+                    lines.push_back(currentLine);
+                }
+
+            currentLine.clear();
+
+            // treat newline as empty line according to need
+            if (c == '\N') lines.push_back("");
+        }
+        else if (isspace(c))//detect space/tab
+        {
+            if (!word.empty())
+            {
+                if (currentLine.length() + word.length() + (currentLine.empty() ? 0 : 1) <= boxWidth)//check if text fits in 60
+                {
+                    if (!currentLine.empty()) currentLine += " ";
+                    currentLine += word;
+                }
+                else
+                {
+                    if (!currentLine.empty()) lines.push_back(currentLine);
+                    currentLine = word;
+                }
+                word.clear();
+            }
+        }
+        else
+        {
+            word += c;
+        }
+
+        // Handle long word breaking
+        while (word.length() > static_cast<size_t>(boxWidth)) {
+            if (!currentLine.empty()) {
+                lines.push_back(currentLine);
+                currentLine.clear();
+            }
+            lines.push_back(word.substr(0, boxWidth));
+            word = word.substr(boxWidth);
+        }
+    }
+
+    if (!currentLine.empty()) lines.push_back(currentLine);
+
+    // Display
+    for (const string& line : lines)
+    {
+        cout << "|" << string(marginSpaces, ' ');
+        for (char c : line) {
+            cout << c << flush;
+            this_thread::sleep_for(chrono::milliseconds(typeSpeed));
+        }
+        int padding = boxWidth - line.length();
+        if (padding >= 0)
+        {
+            cout << string(padding + marginSpaces, ' '); //spacing for box border
+        }
+        cout << "|" << endl;
+    }
+
+    DrawBottomBorder();
+}
+
+// --- File Handling ---
+void autocreateFile(const string& filename, const string& content)
+{
+    ofstream file(filename, ios::trunc);
+    if (file) {
+        file << "\n" << content;
+        file.close();
+    } else {
+        cout << "Error. Unable to add '" << filename << "'! Exiting...\n";
+        system("pause");
+    }
+}
+
+void autoappendFile(const string& filename, const string& content)
+{
+    ofstream file(filename, ios::app);
+    if (file.fail()) {
+        cout << "Error. Unable to append file '" << filename << "'! Exiting...\n" << endl;
+        return;
+    }
+    file << content << "\n\n";
+    file.close();
+}
+
+bool FileExists(const string& filename)
+{
+    fstream file(filename);
+    return file.good();
+}
+
+void readFile(const string& filename)
+{
+    string tmp;
+    fstream file(filename);
+    if (file.fail()) {
+        cout << "Error. File not found! \n";
+        return;
+    }
+    cout << "\nContents of '" << filename << "': \n";
+    while (getline(file, tmp)) {
+        cout << tmp << endl;
+    }
+    file.close();
+}
+
+void deleteFile(const string& filename) {
+    ifstream file(filename);
+    if (file) {
+        file.close();
+        remove(filename.c_str());
+    }
+}
+
+// --- Name Input ---
+string getName()
+{
+    string name;
+    cout << "Enter your name: ";
+    getline(cin, name);
+
+    if (name.empty()) {
+        cout << "Empty input! Please enter your name again. \n";
+        cout << "Your name: ";
+        getline(cin, name);
+    }
+
+    for (char& c : name) {
+        c = toupper(c);
+    }
+
+    system("cls");
+    cout << "Welcome " << name << "! \n";
+
+    return name;
+}
+
+bool isValidExit(string ex, char& confirm)
+{
+    if (ex.length()!= 1) return false; // Not a number
+
+    confirm = toupper(ex[0]); //convert into upper case
+
+    return (confirm == 'Y' || confirm == 'N'); // Valid range
+}
+
+// --- Quiz Logic ---
+int score = 0;
+
+int runQuizQuestions(int level) {
+
+    auto askQuestion = [](const string& question, char correctOption) -> bool
+    {
+        string input;
+        while (true)
+        {
+            cout << question;
+            cin >> input;
+
+            // Only accept a single character A–D
+            if (input.length() == 1)
+            {
+                char answer = toupper(input[0]);
+                if (answer >= 'A' && answer <= 'D')
+                {
+                    return answer == correctOption;
+                }
+            }
+
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid choice! Please enter A, B, C, or D.\n";
+        }
+    };
+
+    string levelNames[3] = {"Beginner", "Intermediate", "Advanced"};
+
+    if (level == 1) {
+        cout << "\n[Beginner Level]\n";
+
+        DrawText_Margin("\nQ1. 2 + 2 = ? \NA. 3 \nB. 4 \nC. 5\nD. 6", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
+        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+
+        DrawText_Margin("\nQ2. What color is the sky on a clear day? \NA. Blue \nB. Green \nC. Red \nD. Yellow", 1);
+        if (askQuestion("Answer: ", 'A')) score++;
+        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+
+        DrawText_Margin("\nQ3. What is the capital of Malaysia? \NA. Bangkok \nB. Manila \nC. Kuala Lumpur \nD. Jakarta", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+
+        DrawText_Margin("\nQ4. Which animal barks? \NA. Cat \nB. Cow \nC. Dog \nD. Elephant", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+
+        DrawText_Margin("\nQ5. 10 - 3 = ? \NA. 7 \nB. 6 \nC. 5 \nD. 8", 1);
+        if (askQuestion("Answer: ", 'A')) score++;
+        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+
+        cin.ignore();
+        system("cls");
+
+        string ex;
+        char confirm;
+        DrawText_Margin("\nCongrats! You have obtained \N" + string (39, ' ') + to_string(score) + "/5 \NDo you want to continue to next level? \nType [Y] to Continue, [n] to Quit to Main", 1);
+
+        while (true)
+        {
+            cout << "Answer: ";
+            getline (cin, ex);
+
+            if (!isValidExit(ex, confirm))
+            {
+                cout << "Invalid input! Please enter Y or N only." << endl;
+                continue;
+            }
+            if (confirm == 'Y')
+            {
+                level = 2;
+                break;
+            }
+            if (confirm == 'N')
+            {
+                system("cls");
+                MainMenu();
+                break;
+            }
+            break;
+        }
+    }
+    else if (level == 2) {
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ1. What is 6 * 7? \NA. 36 \nB. 42 \nC. 48 \nD. 49", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
+
+        DrawText_Margin("\nQ2. What language is this code? \NA. Java \nB. C++ \nC. Python \nD. PHP", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
+
+        DrawText_Margin("\nQ3. What does RAM stand for? \NA. Read All Memory \nB. Run Access Mode \nC. Real-time Access Method \nD. Random Access Memory", 1);
+        if (askQuestion("Answer: ", 'D')) score++;
+
+        DrawText_Margin("\nQ4. Which symbol is used to comment in C++? \NA. //# \nB. */ \nC. // \nD. <!-- -->", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+
+        DrawText_Margin("\nQ5. What is the extension for a C++ source file? \NA. .txt \nB. .html \nC. .cpp \nD. .exe", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+
+        cin.ignore();
+        system("cls");
+
+        string ex;
+        char confirm;
+        DrawText_Margin("\nCongrats! You have obtained a total of \N" + string (39, ' ') + to_string(score) + "/5 \NDo you want to continue to next level? \nType [Y] to Continue, [n] to Quit to Main", 1);
+
+        while (true)
+        {
+            cout << "Answer: ";
+            getline (cin, ex);
+
+            if (!isValidExit(ex, confirm))
+            {
+                cout << "Invalid input! Please enter Y or N only." << endl;
+                continue;
+            }
+            if (confirm == 'Y')
+            {
+                level = 3;
+                break;
+            }
+            if (confirm == 'N')
+            {
+                system("cls");
+                MainMenu();
+                break;
+            }
+            break;
+        }
+
+    }
+    else if (level == 3) {
+        cout << "\n[Advanced Level]\n";
+
+        DrawText_Margin("\nQ1. What is the binary of 5? \NA. 100 \nB. 101 \nC. 110 \nD. 111", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
+
+        DrawText_Margin("\nQ2. Who developed C++? \NA. Dennis Ritchie \nB. James Gosling \nC. Guido van Rossum \nD. Bjarne Stroustrup", 1);
+        if (askQuestion("Answer: ", 'D')) score++;
+
+        DrawText_Margin("\nQ3. What is 15 % 4? \NA. 3 \nB. 2 \nC. 4 \nD. 1", 1);
+        if (askQuestion("Answer: ", 'A')) score++;
+
+        DrawText_Margin("\nQ4. What does OOP stand for? \NA. Object Operating Program \nB. Ordered Operation Process \nC. Object-Oriented Programming \nD. Optimal Object Planning", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+
+        DrawText_Margin("\nQ5. What is 3^2? \NA. 6 \nB. 7 \nC. 9 \nD. 12", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+
+        cin.ignore();
+
+        system("cls");
+
+        string ex;
+        char confirm;
+        DrawText_Margin("\nCongrats! You have obtained a total of \N" + string (39, ' ') + to_string(score) + "/5 \NYou have completed the hardest quiz from us. Exiting to main...", 1);
+        system("pause");
+
+        system("cls");
+        MainMenu();
+    }
+    return score;
+}
+
+bool isValidChoice4(string check, int& choice_lvl) {
+    // Check if the entire string is a valid integer and no extra characters exist
+    istringstream iss(check);
+    if (!(iss >> choice_lvl)) return false; // Not a number
+    string leftover;
+    if (iss >> leftover) return false; // Extra junk after number
+    return (choice_lvl == 1 || choice_lvl == 2 || choice_lvl == 3 || choice_lvl == 4); // Valid range
+}
+
+void DifficultyMenu()
+{
+    system("cls");
+
+    DrawMenuTop();
+    DrawMenu_Margin("  Difficulty Level", 0);
+    DrawMenu_Margin(" ", 0);
+    DrawMenu_Margin("1. Beginner", 0);
+    DrawMenu_Margin("2. Intermediate", 0);
+    DrawMenu_Margin("3. Advanced", 0);
+    DrawMenu_Margin("4. Back to Main Menu", 0);
+    DrawMenuBottom();
+
+    int choice_lvl;
+    string check;
+
+    while (true)
+    {
+        cout << "\nEnter your preference (1/ 2/ 3/ 4): ";
+        getline (cin, check);
+
+        if (!isValidChoice4(check, choice_lvl))
+        {
+            cout << "Invalid input. Please enter a valid number (1, 2, 3 or 4).\n";
+            continue;
+        }
+
+        if (choice_lvl >= 1 && choice_lvl <= 3)
+        {
+            deleteFile("Quiz History.txt");
+            string levelNames[3] = {"Beginner", "Intermediate", "Advanced"};
+            autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[choice_lvl - 1] + " level:");
+            system("cls");
+
+            int score = runQuizQuestions(choice_lvl);
+            autoappendFile("Quiz History.txt", to_string(score) + "/5");
+
+            system("pause");
+            system("cls");
+            MainMenu();
+        }
+        else
+        {
+            system("cls");
+            MainMenu();
+        }
+        break;
+    }
+}
+
+bool isValidChoice3(string check, int& choice) {
+    // Check if the entire string is a valid integer and no extra characters exist
+    istringstream iss(check);
+    if (!(iss >> choice)) return false; // Not a number
+    string leftover;
+    if (iss >> leftover) return false; // Extra junk after number
+    return (choice == 1 || choice == 2 || choice == 3); // Valid range
+}
+
+void MainMenu()
+{
+    DrawMenuTop();
+    DrawMenu_Margin("     Main Menu", 0);
+    DrawMenu_Margin(" ", 0);
+    DrawMenu_Margin(" 1. New Quiz", 0);
+    DrawMenu_Margin(" 2. History ", 0);
+    DrawMenu_Margin(" 3. Exit", 0);
+    DrawMenuBottom();
+
+    int choice;
+    string check;
+
+    while (true)
+    {
+        cout << "\nEnter your choice (1/ 2/ 3): ";
+        getline (cin, check);
+
+        if (!isValidChoice3(check, choice))
+        {
+            cout << "Invalid input. Please enter a valid number (1, 2, or 3).\n";
+            continue;
+        }
+        if (choice == 1)
+        {
+            DifficultyMenu();
+        }
+        else if (choice == 2)
+        {
+            if (FileExists("Quiz History.txt"))
+            {
+                system("cls");
+                readFile("Quiz History.txt");
+                system("pause");
+                system("cls");
+                MainMenu();
+            }
+            else
+            {
+                cout << "Error. File not found. Please try a quiz first. " << endl;
+                system("pause");
+                system("cls");
+                MainMenu();
+            }
+        }
+        else //choice 3
+        {
+            exit(0);
+        }
+
+        break;
+    }
+}
+
+bool PresstoEnter()
+{
+    cout << "\n\n\n" << endl;
+
+    string input;
+    int choice;
+
+    cout << "Press any key to continue or ESC to pause...";
+
+    switch(getch())
+    {
+        case KEY_ESCAPE:
+            DrawMenuTop();
+            DrawMenu_Margin("\n1. Resume", 0);
+            DrawMenu_Margin("\n2. Check Current Score", 0);
+            DrawMenu_Margin("\n3. Restart Quiz", 0);
+            DrawMenu_Margin("\n4. Save & Quit to Main", 0);
+            DrawMenuBottom();
+
+        break;
+    }
+
+    while (true)
+    {
+        cout << "Please enter either choice (1, 2, 3 or 4): ";
+        getline (cin, input);
+
+        if (!(isValidChoice4(input, choice)))
+        {
+            cout << "\nInvalid input. Please enter a valid number (1, 2, 3 or 4). ";
+            continue;
+        }
+        break;
+    }
+
+    if (choice == 1) return true;
+    if (choice == 2)
+    {
+        readFile("Quiz History.txt");
+        system("pause");
+        PresstoEnter();
+    }
+    if (choice == 3)
+    {
+        DifficultyMenu();
+    }
+    if (choice == 4)
+    {
+        MainMenu();
+    }
+
+    return true;
+}
+
+int main()
+{
+    getName();
+
+    MainMenu();
+    return 0;
+}
