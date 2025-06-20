@@ -14,6 +14,7 @@
 
 using namespace std;
 
+//--- Declaration ---
 // Forward declaration for MainMenu to avoid scope issues
 void MainMenu();
 
@@ -49,7 +50,6 @@ void DrawMenuBottom() {
     cout << string(MENU_SIDE, ' ') << "+" << string(MARGIN, '-') << "+" << endl;
 }
 
-
 void DrawMenu_Margin(string text, int typeSpeed) {
     int marginSpaces = 30;
     const int boxWidth = BORDER_WIDTH - 2 * marginSpaces;
@@ -78,7 +78,7 @@ void DrawText_Margin(string text, int typeSpeed) {
     for (size_t i = 0; i <= text.length(); ++i) {
         char c = text[i];
 
-        if (c == '\n' || c == '\0' || c == '\N') //handle newline and end of line
+        if (c == '\n' || c == '\0' || c == '^') //handle newline and end of line
         {
             // Add word to current line or push to newline
             if (!word.empty()) {
@@ -108,7 +108,7 @@ void DrawText_Margin(string text, int typeSpeed) {
             currentLine.clear();
 
             // treat newline as empty line according to need
-            if (c == '\N') lines.push_back("");
+            if (c == '^') lines.push_back("");
         }
         else if (isspace(c))//detect space/tab
         {
@@ -217,6 +217,15 @@ void deleteFile(const string& filename) {
     }
 }
 
+bool isValidChoice3(string check, int& choice) {
+    // Check if the entire string is a valid integer and no extra characters exist
+    istringstream iss(check);
+    if (!(iss >> choice)) return false; // Not a number
+    string leftover;
+    if (iss >> leftover) return false; // Extra junk after number
+    return (choice == 1 || choice == 2 || choice == 3); // Valid range
+}
+
 // --- Name Input ---
 string getName()
 {
@@ -240,6 +249,8 @@ string getName()
     return name;
 }
 
+//--- Error Check ---
+
 bool isValidExit(string ex, char& confirm)
 {
     if (ex.length()!= 1) return false; // Not a number
@@ -249,10 +260,78 @@ bool isValidExit(string ex, char& confirm)
     return (confirm == 'Y' || confirm == 'N'); // Valid range
 }
 
+bool isValidChoice4(string check, int& choice_lvl) {
+    // Check if the entire string is a valid integer and no extra characters exist
+    istringstream iss(check);
+    if (!(iss >> choice_lvl)) return false; // Not a number
+    string leftover;
+    if (iss >> leftover) return false; // Extra junk after number
+    return (choice_lvl == 1 || choice_lvl == 2 || choice_lvl == 3 || choice_lvl == 4);
+}
+
+
 // --- Quiz Logic ---
 int score = 0;
 
-int runQuizQuestions(int level) {
+bool PresstoEnter(int& level)
+{
+    cout << "\n\n\n" << endl;
+
+
+    cout << "Press any key to continue the quiz or ESC to pause...";
+
+    int key = getch();
+    if (key == KEY_ESCAPE)
+    {
+        system("cls");
+        cout << endl;
+        DrawMenuTop();
+        DrawMenu_Margin("    Resume Menu", 0);
+        DrawMenu_Margin("1. Resume", 0);
+        DrawMenu_Margin("2. Current Score", 0);
+        DrawMenu_Margin("3. Quit to Main", 0);
+        DrawMenuBottom();
+
+        string input;
+        int choice;
+
+        cin.ignore();
+
+        while (true)
+        {
+            cout << "Please enter a valid choice (1/ 2/ 3): ";
+            getline (cin, input);
+
+            if (!(isValidChoice3(input, choice)))
+            {
+                cout << "\nInvalid input! ";
+                continue;
+            }
+            break;
+        }
+
+        if (choice == 1) return true;
+        if (choice == 2)
+        {
+            system("cls");
+            readFile("Quiz History.txt");
+            return PresstoEnter(level);
+        }
+        if (choice == 3)
+        {
+            system("cls");
+            MainMenu();
+            return false;
+        }
+
+    }
+    else //other keys
+    {
+        return true;
+    }
+}
+
+int runQuizQuestions(int& level) {
 
     auto askQuestion = [](const string& question, char correctOption) -> bool
     {
@@ -280,35 +359,54 @@ int runQuizQuestions(int level) {
 
     string levelNames[3] = {"Beginner", "Intermediate", "Advanced"};
 
-    if (level == 1) {
+    if (level == 1)
+    {
+        system ("cls");
         cout << "\n[Beginner Level]\n";
-
-        DrawText_Margin("\nQ1. 2 + 2 = ? \NA. 3 \nB. 4 \nC. 5\nD. 6", 1);
+        DrawText_Margin("\nQ1. 2 + 2 = ? ^A. 3 \nB. 4 \nC. 5\nD. 6", 1);
         if (askQuestion("Answer: ", 'B')) score++;
-        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ2. What color is the sky on a clear day? \NA. Blue \nB. Green \nC. Red \nD. Yellow", 1);
+        system ("cls");
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ2. What color is the sky on a clear day? ^A. Blue \nB. Green \nC. Red \nD. Yellow", 1);
         if (askQuestion("Answer: ", 'A')) score++;
-        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ3. What is the capital of Malaysia? \NA. Bangkok \nB. Manila \nC. Kuala Lumpur \nD. Jakarta", 1);
+        system ("cls");
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ3. What is the capital of Malaysia? ^A. Bangkok \nB. Manila \nC. Kuala Lumpur \nD. Jakarta", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ4. Which animal barks? \NA. Cat \nB. Cow \nC. Dog \nD. Elephant", 1);
+        system ("cls");
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ4. Which animal barks? ^A. Cat \nB. Cow \nC. Dog \nD. Elephant", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ5. 10 - 3 = ? \NA. 7 \nB. 6 \nC. 5 \nD. 8", 1);
+        system ("cls");
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ5. 10 - 3 = ? ^A. 7 \nB. 6 \nC. 5 \nD. 8", 1);
         if (askQuestion("Answer: ", 'A')) score++;
-        autoappendFile("Quiz History.txt", to_string(score) + "/5");
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        system("pause");
 
         cin.ignore();
         system("cls");
 
         string ex;
         char confirm;
-        DrawText_Margin("\nCongrats! You have obtained \N" + string (39, ' ') + to_string(score) + "/5 \NDo you want to continue to next level? \nType [Y] to Continue, [n] to Quit to Main", 1);
+        DrawText_Margin("\nCongrats! You have obtained a total of^" + string (39, ' ') + to_string(score) + "/5 ^Do you want to continue to next level? \nType [Y] to Continue, [N] to Quit to Main", 1);
 
         while (true)
         {
@@ -323,6 +421,7 @@ int runQuizQuestions(int level) {
             if (confirm == 'Y')
             {
                 level = 2;
+                runQuizQuestions(level);
                 break;
             }
             if (confirm == 'N')
@@ -335,28 +434,53 @@ int runQuizQuestions(int level) {
         }
     }
     else if (level == 2) {
+        system ("cls");
+
         cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ1. What is 6 * 7? \NA. 36 \nB. 42 \nC. 48 \nD. 49", 1);
+        DrawText_Margin("\nQ1. What is 6 * 7? ^A. 36 \nB. 42 \nC. 48 \nD. 49", 1);
         if (askQuestion("Answer: ", 'B')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ2. What language is this code? \NA. Java \nB. C++ \nC. Python \nD. PHP", 1);
+        system ("cls");
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ2. What language is this code? ^A. Java \nB. C++ \nC. Python \nD. PHP", 1);
         if (askQuestion("Answer: ", 'B')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ3. What does RAM stand for? \NA. Read All Memory \nB. Run Access Mode \nC. Real-time Access Method \nD. Random Access Memory", 1);
+        system ("cls");
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ3. What does RAM stand for? ^A. Read All Memory \nB. Run Access Mode \nC. Real-time Access Method \nD. Random Access Memory", 1);
         if (askQuestion("Answer: ", 'D')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ4. Which symbol is used to comment in C++? \NA. //# \nB. */ \nC. // \nD. <!-- -->", 1);
+        system ("cls");
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ4. Which symbol is used to comment in C++? ^A. //# \nB. */ \nC. // \nD. <!-- -->", 1);
         if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ5. What is the extension for a C++ source file? \NA. .txt \nB. .html \nC. .cpp \nD. .exe", 1);
+        system ("cls");
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ5. What is the extension for a C++ source file? ^A. .txt \nB. .html \nC. .cpp \nD. .exe", 1);
         if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        system("pause");
 
         cin.ignore();
         system("cls");
 
         string ex;
         char confirm;
-        DrawText_Margin("\nCongrats! You have obtained a total of \N" + string (39, ' ') + to_string(score) + "/5 \NDo you want to continue to next level? \nType [Y] to Continue, [n] to Quit to Main", 1);
+        DrawText_Margin("\nCongrats! You have obtained a total of ^" + string (39, ' ') + to_string(score) + "/5 ^Do you want to continue to next level? \nType [Y] to Continue, [N] to Quit to Main", 1);
 
         while (true)
         {
@@ -371,6 +495,7 @@ int runQuizQuestions(int level) {
             if (confirm == 'Y')
             {
                 level = 3;
+                runQuizQuestions(level);
                 break;
             }
             if (confirm == 'N')
@@ -384,22 +509,47 @@ int runQuizQuestions(int level) {
 
     }
     else if (level == 3) {
+        system("cls");
+
         cout << "\n[Advanced Level]\n";
 
-        DrawText_Margin("\nQ1. What is the binary of 5? \NA. 100 \nB. 101 \nC. 110 \nD. 111", 1);
+        DrawText_Margin("\nQ1. What is the binary of 5? ^A. 100 \nB. 101 \nC. 110 \nD. 111", 1);
         if (askQuestion("Answer: ", 'B')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ2. Who developed C++? \NA. Dennis Ritchie \nB. James Gosling \nC. Guido van Rossum \nD. Bjarne Stroustrup", 1);
+        system ("cls");
+        cout << "\n[Advanced Level]\n";
+        DrawText_Margin("\nQ2. Who developed C++? ^A. Dennis Ritchie \nB. James Gosling \nC. Guido van Rossum \nD. Bjarne Stroustrup", 1);
         if (askQuestion("Answer: ", 'D')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ3. What is 15 % 4? \NA. 3 \nB. 2 \nC. 4 \nD. 1", 1);
+        system ("cls");
+        cout << "\n[Advanced Level]\n";
+        DrawText_Margin("\nQ3. What is 15 % 4? ^A. 3 \nB. 2 \nC. 4 \nD. 1", 1);
         if (askQuestion("Answer: ", 'A')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ4. What does OOP stand for? \NA. Object Operating Program \nB. Ordered Operation Process \nC. Object-Oriented Programming \nD. Optimal Object Planning", 1);
+        system ("cls");
+        cout << "\n[Advanced Level]\n";
+        DrawText_Margin("\nQ4. What does OOP stand for? ^A. Object Operating Program \nB. Ordered Operation Process \nC. Object-Oriented Programming \nD. Optimal Object Planning", 1);
         if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
 
-        DrawText_Margin("\nQ5. What is 3^2? \NA. 6 \nB. 7 \nC. 9 \nD. 12", 1);
+        system ("cls");
+        cout << "\n[Advanced Level]\n";
+        DrawText_Margin("\nQ5. What is 3^2? ^A. 6 \nB. 7 \nC. 9 \nD. 12", 1);
         if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        system("pause");
 
         cin.ignore();
 
@@ -407,22 +557,13 @@ int runQuizQuestions(int level) {
 
         string ex;
         char confirm;
-        DrawText_Margin("\nCongrats! You have obtained a total of \N" + string (39, ' ') + to_string(score) + "/5 \NYou have completed the hardest quiz from us. Exiting to main...", 1);
+        DrawText_Margin("\nCongrats! You have obtained a total of ^" + string (39, ' ') + to_string(score) + "/5 ^You have completed the hardest quiz from us. Exiting to main...", 1);
         system("pause");
 
         system("cls");
         MainMenu();
     }
     return score;
-}
-
-bool isValidChoice4(string check, int& choice_lvl) {
-    // Check if the entire string is a valid integer and no extra characters exist
-    istringstream iss(check);
-    if (!(iss >> choice_lvl)) return false; // Not a number
-    string leftover;
-    if (iss >> leftover) return false; // Extra junk after number
-    return (choice_lvl == 1 || choice_lvl == 2 || choice_lvl == 3 || choice_lvl == 4); // Valid range
 }
 
 void DifficultyMenu()
@@ -456,11 +597,10 @@ void DifficultyMenu()
         {
             deleteFile("Quiz History.txt");
             string levelNames[3] = {"Beginner", "Intermediate", "Advanced"};
-            autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[choice_lvl - 1] + " level:");
+            autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[choice_lvl - 1] + " level: " + to_string(score) + "/5^");
             system("cls");
 
             int score = runQuizQuestions(choice_lvl);
-            autoappendFile("Quiz History.txt", to_string(score) + "/5");
 
             system("pause");
             system("cls");
@@ -473,15 +613,6 @@ void DifficultyMenu()
         }
         break;
     }
-}
-
-bool isValidChoice3(string check, int& choice) {
-    // Check if the entire string is a valid integer and no extra characters exist
-    istringstream iss(check);
-    if (!(iss >> choice)) return false; // Not a number
-    string leftover;
-    if (iss >> leftover) return false; // Extra junk after number
-    return (choice == 1 || choice == 2 || choice == 3); // Valid range
 }
 
 void MainMenu()
@@ -536,60 +667,6 @@ void MainMenu()
 
         break;
     }
-}
-
-bool PresstoEnter()
-{
-    cout << "\n\n\n" << endl;
-
-    string input;
-    int choice;
-
-    cout << "Press any key to continue or ESC to pause...";
-
-    switch(getch())
-    {
-        case KEY_ESCAPE:
-            DrawMenuTop();
-            DrawMenu_Margin("\n1. Resume", 0);
-            DrawMenu_Margin("\n2. Check Current Score", 0);
-            DrawMenu_Margin("\n3. Restart Quiz", 0);
-            DrawMenu_Margin("\n4. Save & Quit to Main", 0);
-            DrawMenuBottom();
-
-        break;
-    }
-
-    while (true)
-    {
-        cout << "Please enter either choice (1, 2, 3 or 4): ";
-        getline (cin, input);
-
-        if (!(isValidChoice4(input, choice)))
-        {
-            cout << "\nInvalid input. Please enter a valid number (1, 2, 3 or 4). ";
-            continue;
-        }
-        break;
-    }
-
-    if (choice == 1) return true;
-    if (choice == 2)
-    {
-        readFile("Quiz History.txt");
-        system("pause");
-        PresstoEnter();
-    }
-    if (choice == 3)
-    {
-        DifficultyMenu();
-    }
-    if (choice == 4)
-    {
-        MainMenu();
-    }
-
-    return true;
 }
 
 int main()
