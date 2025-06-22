@@ -229,6 +229,7 @@ bool isValidChoice3(string check, int& choice) {
 // --- Name Input ---
 string getName()
 {
+    DrawText_Margin("Hi everyone! This is a program which is specifically developed as a short quiz themed Social Media Etiquette and Digital Citizenship. ^Before we start the quiz, may I know how would like to be addressed?", 0);
     string name;
     cout << "Enter your name: ";
     getline(cin, name);
