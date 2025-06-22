@@ -7,11 +7,6 @@
 #include <vector>
 #include <variant>
 
-#include <conio.h>
-
-#define KEY_ENTER 13
-#define KEY_ESCAPE 27
-
 using namespace std;
 
 //--- Declaration ---
@@ -173,7 +168,6 @@ void autocreateFile(const string& filename, const string& content)
         file.close();
     } else {
         cout << "Error. Unable to add '" << filename << "'! Exiting...\n";
-        system("pause");
     }
 }
 
@@ -229,6 +223,7 @@ bool isValidChoice3(string check, int& choice) {
 // --- Name Input ---
 string getName()
 {
+    DrawText_Margin("Greetings. ^This is a program which is specifically developed as a short quiz themed Social Media Etiquette and Digital Citizenship. ^Before we start the quiz, may I know how would you like to be addressed?", 0);
     string name;
     cout << "Enter your name: ";
     getline(cin, name);
@@ -243,8 +238,7 @@ string getName()
         c = toupper(c);
     }
 
-    system("cls");
-    cout << "Welcome " << name << "! \n";
+    cout << "\nWelcome " << name << "! \n";
 
     return name;
 }
@@ -275,13 +269,13 @@ int score = 0;
 
 bool PresstoEnter(int& level)
 {
-    cout << "\n\n\n" << endl;
+    cout << "\n\n" << endl;
 
+    cout << "\nEnter any key to continue the quiz or [P] to pause: ";
 
-    cout << "Press any key to continue the quiz or ESC to pause...";
+    char key = cin.get();
 
-    int key = getch();
-    if (key == KEY_ESCAPE)
+    if (key == 'p' || key == 'P')
     {
         system("cls");
         cout << endl;
@@ -312,23 +306,22 @@ bool PresstoEnter(int& level)
 
         if (choice == 1) return true;
         if (choice == 2)
-        {
-            system("cls");
+        {;
             readFile("Quiz History.txt");
             return PresstoEnter(level);
         }
         if (choice == 3)
         {
-            system("cls");
             MainMenu();
             return false;
         }
 
     }
-    else //other keys
+    if (key != 'p' || key != 'P') //other keys
     {
         return true;
     }
+    return true;
 }
 
 int runQuizQuestions(int& level) {
@@ -347,7 +340,16 @@ int runQuizQuestions(int& level) {
                 char answer = toupper(input[0]);
                 if (answer >= 'A' && answer <= 'D')
                 {
-                    return answer == correctOption;
+                    if (answer == correctOption)
+                    {
+                        cout << "\nCorrect!\n";
+                        return true;
+                    }
+                    else
+                    {
+                        cout << "\nIncorrect. The correct answer is " << correctOption << ".\n";
+                        return false;
+                    }
                 }
             }
 
@@ -361,48 +363,47 @@ int runQuizQuestions(int& level) {
 
     if (level == 1)
     {
-        system ("cls");
         cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ1. 2 + 2 = ? ^A. 3 \nB. 4 \nC. 5\nD. 6", 1);
+        DrawText_Margin("\nQ1. What is digital citizenship? ^A. Avoiding the internet to stay safe \nB. Using digital devices only for school \nC. Responsible and appropriate behavior when using technology\nD. Teaching children how to code", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        cin.ignore();
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
+
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ2. What percentage of American teens (ages 12 to 17) use the internet? ^A. 44% \nB. 67% \nC. 88% \nD. 95%", 1);
+        if (askQuestion("Answer: ", 'D')) score++;
+        deleteFile("Quiz History.txt");
+        cin.ignore();
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
+
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ3. Digital etiquette means: ^A. Posting anything you want anonymously \nB. Using social media only with adult supervision \nC. Following respectful behavior online as you would in person \nD. Turning off devices completely", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        cin.ignore();
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
+
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ4. What is a major behavioral red flag that a teen may be experiencing cyberbullying? ^A. Reading books more often \nB. Becoming more talkative \nC. Suddenly avoiding technology \nD. Eating more fruits and vegetables", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        cin.ignore();
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
+
+        cout << "\n[Beginner Level]\n";
+        DrawText_Margin("\nQ5. Which of the following is a possible academic sign that a teen may be cyberbullied? ^A. Joining more school clubs \nB. Getting into trouble at school \nC. Getting all A's in exams \nD. Attending extra classes", 1);
         if (askQuestion("Answer: ", 'B')) score++;
         deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ2. What color is the sky on a clear day? ^A. Blue \nB. Green \nC. Red \nD. Yellow", 1);
-        if (askQuestion("Answer: ", 'A')) score++;
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ3. What is the capital of Malaysia? ^A. Bangkok \nB. Manila \nC. Kuala Lumpur \nD. Jakarta", 1);
-        if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ4. Which animal barks? ^A. Cat \nB. Cow \nC. Dog \nD. Elephant", 1);
-        if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ5. 10 - 3 = ? ^A. 7 \nB. 6 \nC. 5 \nD. 8", 1);
-        if (askQuestion("Answer: ", 'A')) score++;
-        deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         system("pause");
 
         cin.ignore();
-        system("cls");
 
         string ex;
         char confirm;
@@ -426,7 +427,6 @@ int runQuizQuestions(int& level) {
             }
             if (confirm == 'N')
             {
-                system("cls");
                 MainMenu();
                 break;
             }
@@ -434,49 +434,50 @@ int runQuizQuestions(int& level) {
         }
     }
     else if (level == 2) {
-        system ("cls");
 
         cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ1. What is 6 * 7? ^A. 36 \nB. 42 \nC. 48 \nD. 49", 1);
-        if (askQuestion("Answer: ", 'B')) score++;
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ2. What language is this code? ^A. Java \nB. C++ \nC. Python \nD. PHP", 1);
-        if (askQuestion("Answer: ", 'B')) score++;
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ3. What does RAM stand for? ^A. Read All Memory \nB. Run Access Mode \nC. Real-time Access Method \nD. Random Access Memory", 1);
-        if (askQuestion("Answer: ", 'D')) score++;
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ4. Which symbol is used to comment in C++? ^A. //# \nB. */ \nC. // \nD. <!-- -->", 1);
+        DrawText_Margin("\nQ1. Which of the following is part of digital safety? ^A. Posting every detail of your daily life online \nB. Giving a false age to sign up for websites \nC. Protecting personal information online \nD. Ignoring harmful content", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
+
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ2. Which of the following is NOT a recommended method to teach digital etiquette? ^A. Discussing the permanency of online posts \nB. Encouraging device use in bathrooms \nC. Role modeling respectful online behavior \nD. Setting limits on screen time", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
+        deleteFile("Quiz History.txt");
+        cin.ignore();
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
+
+
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ3. What is one strategy parents can use to help ensure their child's online safety? ^A. Let them use the internet freely at night \nB. Avoid checking their social media \nC. Set privacy controls on devices and accounts \nD. Allow unlimited screen time", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        cin.ignore();
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        PresstoEnter(level);
+
+        cout << "\n[Intermediate Level]\n";
+        DrawText_Margin("\nQ4. What is one legal reason board members should avoid discussing school business with each other on social media? ^A. It can increase their social media traffic too much \nB. It can be considered a violation of open meeting laws \nC. It will confuse students and teachers \nD. It prevents them from attending board meetings", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
+        deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         system ("cls");
         cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ5. What is the extension for a C++ source file? ^A. .txt \nB. .html \nC. .cpp \nD. .exe", 1);
+        DrawText_Margin("\nQ5. What does 'guilty by association' mean in social media context? ^A. You get blamed for your friend's hacking \nB. Your friend deletes your account \nC. You are judged based on photos of your friends \nD. You are guilty of breaking laws", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        system("pause");
+
 
         cin.ignore();
-        system("cls");
 
         string ex;
         char confirm;
@@ -500,7 +501,6 @@ int runQuizQuestions(int& level) {
             }
             if (confirm == 'N')
             {
-                system("cls");
                 MainMenu();
                 break;
             }
@@ -509,58 +509,47 @@ int runQuizQuestions(int& level) {
 
     }
     else if (level == 3) {
-        system("cls");
-
         cout << "\n[Advanced Level]\n";
 
-        DrawText_Margin("\nQ1. What is the binary of 5? ^A. 100 \nB. 101 \nC. 110 \nD. 111", 1);
-        if (askQuestion("Answer: ", 'B')) score++;
+        DrawText_Margin("\nQ1. Why is it important to keep an open dialogue with teens about digital behavior? ^A. To punish them when they do wrong \nB. To track every message they send \nC. So they feel safe to share their experiences \nD. So they avoid making friends online", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
-        system ("cls");
         cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ2. Who developed C++? ^A. Dennis Ritchie \nB. James Gosling \nC. Guido van Rossum \nD. Bjarne Stroustrup", 1);
+        DrawText_Margin("\nQ2. Why might teens engage in inappropriate online behavior even if they didn't plan to? ^A. Because parents do not monitor them \nB. Because social media encourages good habits \nC. Because they are trying to impress others \nD. Because they access content using false ages", 1);
         if (askQuestion("Answer: ", 'D')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
-        system ("cls");
         cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ3. What is 15 % 4? ^A. 3 \nB. 2 \nC. 4 \nD. 1", 1);
-        if (askQuestion("Answer: ", 'A')) score++;
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
-
-        system ("cls");
-        cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ4. What does OOP stand for? ^A. Object Operating Program \nB. Ordered Operation Process \nC. Object-Oriented Programming \nD. Optimal Object Planning", 1);
+        DrawText_Margin("\nQ3. How does parental involvement affect teen digital behavior? ^A. It encourages teens to hide things \nB. It increases risk-taking online \nC. It supports appropriate and responsible use \nD. It has no effect", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
-        system ("cls");
         cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ5. What is 3^2? ^A. 6 \nB. 7 \nC. 9 \nD. 12", 1);
+        DrawText_Margin("\nQ4. What does the SIFT Method help students with? ^A. Memorizing facts for exams \nB. Managing physical fitness \nC. Evaluating questionable content and misinformation online \nD. Tracking screen time", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        system("pause");
+        PresstoEnter(level);
+
+        cout << "\n[Advanced Level]\n";
+        DrawText_Margin("\nQ5. What percent of 10th-grade students in Washington were at risk for problematic internet use in 2021? ^A. 5.5% \nB. 10.9% \nC. 18.1% \nD. 22.5%", 1);
+        if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Quiz History.txt");
+        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
 
         cin.ignore();
-
-        system("cls");
 
         string ex;
         char confirm;
         DrawText_Margin("\nCongrats! You have obtained a total of ^" + string (39, ' ') + to_string(score) + "/5 ^You have completed the hardest quiz from us. Exiting to main...", 1);
-        system("pause");
 
-        system("cls");
         MainMenu();
     }
     return score;
@@ -598,17 +587,13 @@ void DifficultyMenu()
             deleteFile("Quiz History.txt");
             string levelNames[3] = {"Beginner", "Intermediate", "Advanced"};
             autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[choice_lvl - 1] + " level: " + to_string(score) + "/5^");
-            system("cls");
 
             int score = runQuizQuestions(choice_lvl);
 
-            system("pause");
-            system("cls");
             MainMenu();
         }
         else
         {
-            system("cls");
             MainMenu();
         }
         break;
@@ -646,17 +631,12 @@ void MainMenu()
         {
             if (FileExists("Quiz History.txt"))
             {
-                system("cls");
                 readFile("Quiz History.txt");
-                system("pause");
-                system("cls");
                 MainMenu();
             }
             else
             {
                 cout << "Error. File not found. Please try a quiz first. " << endl;
-                system("pause");
-                system("cls");
                 MainMenu();
             }
         }
