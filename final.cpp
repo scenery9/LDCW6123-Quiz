@@ -277,7 +277,6 @@ bool PresstoEnter(int& level)
 
     if (key == 'p' || key == 'P')
     {
-        system("cls");
         cout << endl;
         DrawMenuTop();
         DrawMenu_Margin("    Resume Menu", 0);
@@ -405,7 +404,7 @@ int runQuizQuestions(int& level) {
 
         string ex;
         char confirm;
-        DrawText_Margin("\nCongrats! You have obtained a total of^" + string (39, ' ') + to_string(score) + "/5 ^Do you want to continue to next level? \nType [Y] to Continue, [N] to Quit to Main", 1);
+        DrawText_Margin("\nCongrats! You have obtained a total of ^ \n" + string (39, ' ') + to_string(score) + "/5 ^Do you want to continue to next level? \nType [Y] to Continue, [N] to Quit to Main", 1);
 
         while (true)
         {
@@ -449,7 +448,6 @@ int runQuizQuestions(int& level) {
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
-
         cout << "\n[Intermediate Level]\n";
         DrawText_Margin("\nQ3. What is one strategy parents can use to help ensure their child's online safety? ^A. Let them use the internet freely at night \nB. Avoid checking their social media \nC. Set privacy controls on devices and accounts \nD. Allow unlimited screen time", 1);
         if (askQuestion("Answer: ", 'C')) score++;
@@ -478,7 +476,7 @@ int runQuizQuestions(int& level) {
 
         string ex;
         char confirm;
-        DrawText_Margin("\nCongrats! You have obtained a total of ^" + string (39, ' ') + to_string(score) + "/5 ^Do you want to continue to next level? \nType [Y] to Continue, [N] to Quit to Main", 1);
+        DrawText_Margin("\nCongrats! You have obtained a total of ^ \n" + string (39, ' ') + to_string(score) + "/5 ^Do you want to continue to next level? \nType [Y] to Continue, [N] to Quit to Main", 1);
 
         while (true)
         {
@@ -511,6 +509,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ1. Why is it important to keep an open dialogue with teens about digital behavior? ^A. To punish them when they do wrong \nB. To track every message they send \nC. So they feel safe to share their experiences \nD. So they avoid making friends online", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -518,6 +517,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ2. Why might teens engage in inappropriate online behavior even if they didn't plan to? ^A. Because parents do not monitor them \nB. Because social media encourages good habits \nC. Because they are trying to impress others \nD. Because they access content using false ages", 1);
         if (askQuestion("Answer: ", 'D')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -525,6 +525,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ3. How does parental involvement affect teen digital behavior? ^A. It encourages teens to hide things \nB. It increases risk-taking online \nC. It supports appropriate and responsible use \nD. It has no effect", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -532,20 +533,20 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ4. What does the SIFT Method help students with? ^A. Memorizing facts for exams \nB. Managing physical fitness \nC. Evaluating questionable content and misinformation online \nD. Tracking screen time", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ5. What is a major risk of using inappropriate photos online? ^A. They take up space \nB. They could cause your device to slow down \nC. They may be the top result on search engines and hurt your career \nD. They don’t get enough likes", 1);
+        DrawText_Margin("\nQ5. What is a major risk of using inappropriate photos online? ^A. They take up space \nB. They could cause your device to slow down \nC. They may be the top result on search engines and hurt your career \nD. They don't get enough likes", 1);
         if (askQuestion("Answer: ", 'C')) score++;
+        cin.ignore();
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
 
-        cin.ignore();
-
         string ex;
         char confirm;
-        DrawText_Margin("\nCongrats! You have obtained a total of ^" + string (39, ' ') + to_string(score) + "/5 ^You have completed the hardest quiz from us. Exiting to main...", 1);
+        DrawText_Margin("\nCongrats! You have obtained a total of ^ \n" + string (39, ' ') + to_string(score) + "/5 ^You have completed the hardest quiz from us. Exiting to main...", 1);
 
         MainMenu();
     }
