@@ -348,7 +348,16 @@ int runQuizQuestions(int& level) {
                 char answer = toupper(input[0]);
                 if (answer >= 'A' && answer <= 'D')
                 {
-                    return answer == correctOption;
+                    if (answer == correctOption)
+                    {
+                        cout << "\nCorrect!\n";
+                        return true;
+                    }
+                    else
+                    {
+                        cout << "\nIncorrect. The correct answer is " << correctOption << ".\n";
+                        return false;
+                    }
                 }
             }
 
