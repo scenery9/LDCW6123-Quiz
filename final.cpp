@@ -401,8 +401,6 @@ int runQuizQuestions(int& level) {
         deleteFile("Quiz History.txt");
         cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        system("pause");
-
         cin.ignore();
 
         string ex;
