@@ -372,8 +372,8 @@ int runQuizQuestions(int& level) {
         PresstoEnter(level);
 
         cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ2. What percentage of American teens (ages 12 to 17) use the internet? ^A. 44% \nB. 67% \nC. 88% \nD. 95%", 1);
-        if (askQuestion("Answer: ", 'D')) score++;
+        DrawText_Margin("\nQ2. What should a board member do when posting district information on social media? ^A. Make up new information to sound engaging \nB. Check accuracy and link to official sources \nC. Only post during school hours \nD. Use a fake name to post content", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
         deleteFile("Quiz History.txt");
         cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
@@ -539,7 +539,7 @@ int runQuizQuestions(int& level) {
         PresstoEnter(level);
 
         cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ5. What percent of 10th-grade students in Washington were at risk for problematic internet use in 2021? ^A. 5.5% \nB. 10.9% \nC. 18.1% \nD. 22.5%", 1);
+        DrawText_Margin("\nQ5. What is a major risk of using inappropriate photos online? ^A. They take up space \nB. They could cause your device to slow down \nC. They may be the top result on search engines and hurt your career \nD. They don’t get enough likes", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
