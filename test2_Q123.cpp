@@ -387,7 +387,7 @@ int runQuizQuestions(int& level) {
 
         system ("cls");
         cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ4. Which animal barks? ^A. Cat \nB. Cow \nC. Dog \nD. Elephant", 1);
+        DrawText_Margin("\nQ4. What is a major behavioral red flag that a teen may be experiencing cyberbullying? ^A. Reading books more often \nB. Becoming more talkative \nC. Suddenly avoiding technology \nD. Eating more fruits and vegetables", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
@@ -395,8 +395,8 @@ int runQuizQuestions(int& level) {
 
         system ("cls");
         cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nQ5. 10 - 3 = ? ^A. 7 \nB. 6 \nC. 5 \nD. 8", 1);
-        if (askQuestion("Answer: ", 'A')) score++;
+        DrawText_Margin("\nQ5. Which of the following is a possible academic sign that a teen may be cyberbullied? ^A. Joining more school clubs \nB. Getting into trouble at school \nC. Getting all A's in exams \nD. Attending extra classes", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         system("pause");
@@ -461,15 +461,15 @@ int runQuizQuestions(int& level) {
 
         system ("cls");
         cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ4. Which symbol is used to comment in C++? ^A. //# \nB. */ \nC. // \nD. <!-- -->", 1);
-        if (askQuestion("Answer: ", 'C')) score++;
+        DrawText_Margin("\nQ4. What is one legal reason board members should avoid discussing school business with each other on social media? ^A. It can increase their social media traffic too much \nB. It can be considered a violation of open meeting laws \nC. It will confuse students and teachers \nD. It prevents them from attending board meetings", 1);
+        if (askQuestion("Answer: ", 'B')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         system ("cls");
         cout << "\n[Intermediate Level]\n";
-        DrawText_Margin("\nQ5. What is the extension for a C++ source file? ^A. .txt \nB. .html \nC. .cpp \nD. .exe", 1);
+        DrawText_Margin("\nQ5. What does 'guilty by association' mean in social media context? ^A. You get blamed for your friend's hacking \nB. Your friend deletes your account \nC. You are judged based on photos of your friends \nD. You are guilty of breaking laws", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
@@ -537,7 +537,7 @@ int runQuizQuestions(int& level) {
 
         system ("cls");
         cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ4. What does OOP stand for? ^A. Object Operating Program \nB. Ordered Operation Process \nC. Object-Oriented Programming \nD. Optimal Object Planning", 1);
+        DrawText_Margin("\nQ4. What does the SIFT Method help students with? ^A. Memorizing facts for exams \nB. Managing physical fitness \nC. Evaluating questionable content and misinformation online \nD. Tracking screen time", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
@@ -545,7 +545,7 @@ int runQuizQuestions(int& level) {
 
         system ("cls");
         cout << "\n[Advanced Level]\n";
-        DrawText_Margin("\nQ5. What is 3^2? ^A. 6 \nB. 7 \nC. 9 \nD. 12", 1);
+        DrawText_Margin("\nQ5. What percent of 10th-grade students in Washington were at risk for problematic internet use in 2021? ^A. 5.5% \nB. 10.9% \nC. 18.1% \nD. 22.5%", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
