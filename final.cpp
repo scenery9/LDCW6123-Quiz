@@ -468,7 +468,6 @@ int runQuizQuestions(int& level) {
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
-        system ("cls");
         cout << "\n[Intermediate Level]\n";
         DrawText_Margin("\nQ5. What does 'guilty by association' mean in social media context? ^A. You get blamed for your friend's hacking \nB. Your friend deletes your account \nC. You are judged based on photos of your friends \nD. You are guilty of breaking laws", 1);
         if (askQuestion("Answer: ", 'C')) score++;
@@ -557,7 +556,6 @@ int runQuizQuestions(int& level) {
 
 void DifficultyMenu()
 {
-    system("cls");
 
     DrawMenuTop();
     DrawMenu_Margin("  Difficulty Level", 0);
