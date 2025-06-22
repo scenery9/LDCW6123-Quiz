@@ -7,11 +7,6 @@
 #include <vector>
 #include <variant>
 
-#include <conio.h>
-
-#define KEY_ENTER 13
-#define KEY_ESCAPE 27
-
 using namespace std;
 
 //--- Declaration ---
@@ -229,7 +224,7 @@ bool isValidChoice3(string check, int& choice) {
 // --- Name Input ---
 string getName()
 {
-    DrawText_Margin("Hi everyone! This is a program which is specifically developed as a short quiz themed Social Media Etiquette and Digital Citizenship. ^Before we start the quiz, may I know how would like to be addressed?", 0);
+    DrawText_Margin("Greetings. ^This is a program which is specifically developed as a short quiz themed Social Media Etiquette and Digital Citizenship. ^Before we start the quiz, may I know how would you like to be addressed?", 0);
     string name;
     cout << "Enter your name: ";
     getline(cin, name);
@@ -276,13 +271,13 @@ int score = 0;
 
 bool PresstoEnter(int& level)
 {
-    cout << "\n\n\n" << endl;
+    cout << "\n\n" << endl;
 
+    cout << "\nEnter any key to continue the quiz or [P] to pause: ";
 
-    cout << "Press any key to continue the quiz or ESC to pause...";
+    char key = cin.get();
 
-    int key = getch();
-    if (key == KEY_ESCAPE)
+    if (key == 'p' || key == 'P')
     {
         system("cls");
         cout << endl;
@@ -326,10 +321,11 @@ bool PresstoEnter(int& level)
         }
 
     }
-    else //other keys
+    if (key != 'p' || key != 'P') //other keys
     {
         return true;
     }
+    return true;
 }
 
 int runQuizQuestions(int& level) {
@@ -373,9 +369,10 @@ int runQuizQuestions(int& level) {
     {
         system ("cls");
         cout << "\n[Beginner Level]\n";
-        DrawText_Margin("\nWhat is digital citizenship? ^A. Avoiding the internet to stay safe \nB. Using digital devices only for school \nC. Responsible and appropriate behavior when using technology\nD. Teaching children how to code", 1);
+        DrawText_Margin("\nQ1. What is digital citizenship? ^A. Avoiding the internet to stay safe \nB. Using digital devices only for school \nC. Responsible and appropriate behavior when using technology\nD. Teaching children how to code", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -384,6 +381,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ2. What percentage of American teens (ages 12 to 17) use the internet? ^A. 44% \nB. 67% \nC. 88% \nD. 95%", 1);
         if (askQuestion("Answer: ", 'D')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -392,6 +390,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ3. Digital etiquette means: ^A. Posting anything you want anonymously \nB. Using social media only with adult supervision \nC. Following respectful behavior online as you would in person \nD. Turning off devices completely", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -400,6 +399,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ4. What is a major behavioral red flag that a teen may be experiencing cyberbullying? ^A. Reading books more often \nB. Becoming more talkative \nC. Suddenly avoiding technology \nD. Eating more fruits and vegetables", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -408,6 +408,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ5. Which of the following is a possible academic sign that a teen may be cyberbullied? ^A. Joining more school clubs \nB. Getting into trouble at school \nC. Getting all A's in exams \nD. Attending extra classes", 1);
         if (askQuestion("Answer: ", 'B')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         system("pause");
 
@@ -450,6 +451,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ1. Which of the following is part of digital safety? ^A. Posting every detail of your daily life online \nB. Giving a false age to sign up for websites \nC. Protecting personal information online \nD. Ignoring harmful content", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -458,6 +460,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ2. Which of the following is NOT a recommended method to teach digital etiquette? ^A. Discussing the permanency of online posts \nB. Encouraging device use in bathrooms \nC. Role modeling respectful online behavior \nD. Setting limits on screen time", 1);
         if (askQuestion("Answer: ", 'B')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -466,6 +469,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ3. What is one strategy parents can use to help ensure their child's online safety? ^A. Let them use the internet freely at night \nB. Avoid checking their social media \nC. Set privacy controls on devices and accounts \nD. Allow unlimited screen time", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -474,6 +478,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ4. What is one legal reason board members should avoid discussing school business with each other on social media? ^A. It can increase their social media traffic too much \nB. It can be considered a violation of open meeting laws \nC. It will confuse students and teachers \nD. It prevents them from attending board meetings", 1);
         if (askQuestion("Answer: ", 'B')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
@@ -482,6 +487,7 @@ int runQuizQuestions(int& level) {
         DrawText_Margin("\nQ5. What does 'guilty by association' mean in social media context? ^A. You get blamed for your friend's hacking \nB. Your friend deletes your account \nC. You are judged based on photos of your friends \nD. You are guilty of breaking laws", 1);
         if (askQuestion("Answer: ", 'C')) score++;
         deleteFile("Quiz History.txt");
+        cin.ignore();
         autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         system("pause");
 
