@@ -306,7 +306,7 @@ bool PresstoEnter(int& level)
         if (choice == 1) return true;
         if (choice == 2)
         {;
-            readFile("Quiz History.txt");
+            readFile("Current Score.txt");
             return PresstoEnter(level);
         }
         if (choice == 3)
@@ -362,45 +362,54 @@ int runQuizQuestions(int& level) {
 
     if (level == 1)
     {
+        score = 0;
+
         cout << "\n[Beginner Level]\n";
         DrawText_Margin("\nQ1. What is digital citizenship? ^A. Avoiding the internet to stay safe \nB. Using digital devices only for school \nC. Responsible and appropriate behavior when using technology\nD. Teaching children how to code", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Beginner Level]\n";
         DrawText_Margin("\nQ2. What should a board member do when posting district information on social media? ^A. Make up new information to sound engaging \nB. Check accuracy and link to official sources \nC. Only post during school hours \nD. Use a fake name to post content", 1);
         if (askQuestion("Answer: ", 'B')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Beginner Level]\n";
         DrawText_Margin("\nQ3. Digital etiquette means: ^A. Posting anything you want anonymously \nB. Using social media only with adult supervision \nC. Following respectful behavior online as you would in person \nD. Turning off devices completely", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Beginner Level]\n";
         DrawText_Margin("\nQ4. What is a major behavioral red flag that a teen may be experiencing cyberbullying? ^A. Reading books more often \nB. Becoming more talkative \nC. Suddenly avoiding technology \nD. Eating more fruits and vegetables", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
-        PresstoEnter(level);
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
 
         cout << "\n[Beginner Level]\n";
         DrawText_Margin("\nQ5. Which of the following is a possible academic sign that a teen may be cyberbullied? ^A. Joining more school clubs \nB. Getting into trouble at school \nC. Getting all A's in exams \nD. Attending extra classes", 1);
         if (askQuestion("Answer: ", 'B')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         cin.ignore();
+        if (FileExists("Quiz History.txt"))
+        {
+            autoappendFile("Quiz History.txt", "Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        }
+        else
+        {
+            autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        }
 
         string ex;
         char confirm;
@@ -432,47 +441,55 @@ int runQuizQuestions(int& level) {
     }
     else if (level == 2) {
 
+        score = 0;
+
         cout << "\n[Intermediate Level]\n";
         DrawText_Margin("\nQ1. Which of the following is part of digital safety? ^A. Posting every detail of your daily life online \nB. Giving a false age to sign up for websites \nC. Protecting personal information online \nD. Ignoring harmful content", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Intermediate Level]\n";
         DrawText_Margin("\nQ2. Which of the following is NOT a recommended method to teach digital etiquette? ^A. Discussing the permanency of online posts \nB. Encouraging device use in bathrooms \nC. Role modeling respectful online behavior \nD. Setting limits on screen time", 1);
         if (askQuestion("Answer: ", 'B')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Intermediate Level]\n";
         DrawText_Margin("\nQ3. What is one strategy parents can use to help ensure their child's online safety? ^A. Let them use the internet freely at night \nB. Avoid checking their social media \nC. Set privacy controls on devices and accounts \nD. Allow unlimited screen time", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Intermediate Level]\n";
         DrawText_Margin("\nQ4. What is one legal reason board members should avoid discussing school business with each other on social media? ^A. It can increase their social media traffic too much \nB. It can be considered a violation of open meeting laws \nC. It will confuse students and teachers \nD. It prevents them from attending board meetings", 1);
         if (askQuestion("Answer: ", 'B')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Intermediate Level]\n";
         DrawText_Margin("\nQ5. What does 'guilty by association' mean in social media context? ^A. You get blamed for your friend's hacking \nB. Your friend deletes your account \nC. You are judged based on photos of your friends \nD. You are guilty of breaking laws", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
 
-
-        cin.ignore();
+        if (FileExists("Quiz History.txt"))
+        {
+            autoappendFile("Quiz History.txt", "Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        }
+        else
+        {
+            autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        }
 
         string ex;
         char confirm;
@@ -504,45 +521,56 @@ int runQuizQuestions(int& level) {
 
     }
     else if (level == 3) {
+
+        score = 0;
         cout << "\n[Advanced Level]\n";
 
         DrawText_Margin("\nQ1. Why is it important to keep an open dialogue with teens about digital behavior? ^A. To punish them when they do wrong \nB. To track every message they send \nC. So they feel safe to share their experiences \nD. So they avoid making friends online", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Advanced Level]\n";
         DrawText_Margin("\nQ2. Why might teens engage in inappropriate online behavior even if they didn't plan to? ^A. Because parents do not monitor them \nB. Because social media encourages good habits \nC. Because they are trying to impress others \nD. Because they access content using false ages", 1);
         if (askQuestion("Answer: ", 'D')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Advanced Level]\n";
         DrawText_Margin("\nQ3. How does parental involvement affect teen digital behavior? ^A. It encourages teens to hide things \nB. It increases risk-taking online \nC. It supports appropriate and responsible use \nD. It has no effect", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Advanced Level]\n";
         DrawText_Margin("\nQ4. What does the SIFT Method help students with? ^A. Memorizing facts for exams \nB. Managing physical fitness \nC. Evaluating questionable content and misinformation online \nD. Tracking screen time", 1);
         if (askQuestion("Answer: ", 'C')) score++;
-        deleteFile("Quiz History.txt");
+        deleteFile("Current Score.txt");
         cin.ignore();
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
         PresstoEnter(level);
 
         cout << "\n[Advanced Level]\n";
         DrawText_Margin("\nQ5. What is a major risk of using inappropriate photos online? ^A. They take up space \nB. They could cause your device to slow down \nC. They may be the top result on search engines and hurt your career \nD. They don't get enough likes", 1);
         if (askQuestion("Answer: ", 'C')) score++;
+        deleteFile("Current Score.txt");
         cin.ignore();
-        deleteFile("Quiz History.txt");
-        autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        autocreateFile("Current Score.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+
+        if (FileExists("Quiz History.txt"))
+        {
+            autoappendFile("Quiz History.txt", "Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        }
+        else
+        {
+            autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[level - 1] + " level: " + to_string(score) + "/5\n");
+        }
 
         string ex;
         char confirm;
@@ -581,9 +609,7 @@ void DifficultyMenu()
 
         if (choice_lvl >= 1 && choice_lvl <= 3)
         {
-            deleteFile("Quiz History.txt");
             string levelNames[3] = {"Beginner", "Intermediate", "Advanced"};
-            autocreateFile("Quiz History.txt","Marks obtained from " + levelNames[choice_lvl - 1] + " level: " + to_string(score) + "/5^");
 
             int score = runQuizQuestions(choice_lvl);
 
